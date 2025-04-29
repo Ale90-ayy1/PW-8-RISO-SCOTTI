@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Ambientale e Produttiva – Riso Scotti</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f4f4; }
+        h1 { text-align: center; }
+        .chart-container { width: 90%; margin: auto; padding: 30px 0; }
+        canvas { background: white; border: 1px solid #ccc; border-radius: 8px; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Dashboard Ambientale e di Produzione – Riso Scotti</h1>
+
+<div class="chart-container"><canvas id="climaChart"></canvas></div>
+<div class="chart-container"><canvas id="produzioneChart"></canvas></div>
+<div class="chart-container"><canvas id="efficienzaChart"></canvas></div>
+
+<script>
+    const mesi = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+    const temperatura = [6.5, 8.2, 12.4, 16.5, 20.0, 24.2, 28.5, 30.2, 25.8, 19.5, 13.8, 9.0];
+    const umidita = [80, 78, 72, 70, 65, 60, 55, 50, 60, 70, 75, 80];
+    const precipitazioni = [95, 80, 70, 60, 50, 70, 80, 90, 120, 150, 160, 170];
+    const raccolto = [300, 350, 400, 450, 550, 650, 700, 750, 850, 900, 950, 1000];
+    const crescita = [0, 0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+    const risorse = [5000, 5200, 5400, 5600, 5700, 5800, 5900, 6000, 6100, 6200, 6300, 6400];
+    const efficienza = raccolto.map((r, i) => (r / risorse[i] * 1000).toFixed(2)); // kg/1000 litri
+
+    // 1. Grafico Clima
+    new Chart(document.getElementById("climaChart"), {
+        type: 'line',
+        data: {
+            labels: mesi,
+            datasets: [
+                {
+                    label: "Temperatura (°C)",
+                    data: temperatura,
+                    borderColor: "red",
+                    backgroundColor: "rgba(255,0,0,0.1)",
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: "Umidità (%)",
+                    data: umidita,
+                    borderColor: "blue",
+                    backgroundColor: "rgba(0,0,255,0.1)",
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: "Precipitazioni (mm)",
+                    data: precipitazioni,
+                    borderColor: "green",
+                    backgroundColor: "rgba(0,255,0,0.1)",
+                    fill: true,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                title: { display: true, text: "Condizioni Ambientali", font: { size: 18 } },
+                legend: { position: "top" }
+            },
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // 2. Grafico Produzione
+    new Chart(document.getElementById("produzioneChart"), {
+        type: 'bar',
+        data: {
+            labels: mesi,
+            datasets: [
+                {
+                    label: "Quantità Raccolto (kg/ha)",
+                    data: raccolto,
+                    backgroundColor: "orange"
+                },
+                {
+                    label: "Tempi di Crescita (giorni)",
+                    data: crescita,
+                    backgroundColor: "purple"
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                title: { display: true, text: "Produzione e Tempi di Crescita", font: { size: 18 } },
+                legend: { position: "top" }
+            },
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // 3. Grafico Efficienza
+    new Chart(document.getElementById("efficienzaChart"), {
+        type: 'line',
+        data: {
+            labels: mesi,
+            datasets: [
+                {
+                    label: "Efficienza Raccolto (kg / 1000 litri)",
+                    data: efficienza,
+                    borderColor: "teal",
+                    backgroundColor: "rgba(0,128,128,0.1)",
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                title: { display: true, text: "Efficienza di Produzione", font: { size: 18 } },
+                legend: { position: "top" }
+            },
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
